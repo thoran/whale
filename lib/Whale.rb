@@ -1,15 +1,13 @@
 # Whale.rb
 # Whale
 
-require 'pp'
-
 require 'mechanize'
-
-require 'File/self.collect'
+require 'pp'
+require_relative 'File/self.collect'
 
 class Whale
-
   TLD = %w{com net org edu int mil gov arpa biz aero name coop info pro museum}
+  VERSION_STRING = '0.8.0'
 
   attr_accessor\
     :debug,
@@ -59,7 +57,7 @@ class Whale
 
   def counter_phish
     start_time = Time.now
-    puts "Whale session begun #{start_time}."
+    puts "whale session begun #{start_time}."
     submission_count = 0
     begin
       loop do
@@ -102,15 +100,15 @@ class Whale
 
   def page
     @page ||= (
-      _page = mechanize.get(@url)
-      md = _page.body.match(/meta.*?Refresh.*?url=(.*?)"/i)
+      page = mechanize.get(@url)
+      md = page.body.match(/meta.*?Refresh.*?url=(.*?)"/i)
       if md
         puts 'meta_refresh_url found' if @debug
-        _page = mechanize.get(md[1])
-        pp _page if @debug
+        page = mechanize.get(md[1])
+        pp_page if @debug
       end
-      pp _page if @debug
-      _page
+      pp page if @debug
+      page
     )
   end
 
@@ -169,5 +167,4 @@ class Whale
       form.fields[1] = password
     end
   end
-
 end
